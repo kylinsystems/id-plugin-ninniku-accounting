@@ -1,0 +1,15 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Accounting
+Bundle-SymbolicName: tw.ninniku.accounting
+Bundle-Version: 10.0.0.qualifier
+Bundle-ClassPath: .
+Bundle-Vendor: Ray Lee
+Automatic-Module-Name: tw.ninniku.accounting
+Bundle-RequiredExecutionEnvironment: JavaSE-11
+Require-Bundle: org.adempiere.base
+Service-Component: OSGI-INF/tw.ninniku.accounting.process.xml,
+ OSGI-INF/tw.ninniku.accounting.acct.xml
+Import-Package: org.adempiere.plugin.utils
+Bundle-Activator: org.adempiere.plugin.utils.Version2PackActivator
+Bundle-ActivationPolicy: lazy
