@@ -1,22 +1,37 @@
 package tw.ninniku.accounting.process;
 
 import org.compiere.model.MClient;
+import org.compiere.model.MProcessPara;
+import org.compiere.process.ProcessInfoParameter;
 import org.compiere.process.SvrProcess;
 import org.compiere.util.DB;
 
 public class CopyDefaultProductAccouning extends SvrProcess {
 
+	private int p_AD_Client_ID;
+	private int p_C_AcctSchema_ID;
+
 	@Override
 	protected void prepare() {
-		// TODO Auto-generated method stub
+		for (ProcessInfoParameter para : getParameter()) {
+			String name = para.getParameterName();
+			if (para.getParameter() == null)
+				;
+			else if (name.equals("AD_Client_ID"))
+				p_AD_Client_ID = para.getParameterAsInt();
+			else if (name.equals("C_AcctSchema_ID"))
+				p_C_AcctSchema_ID = para.getParameterAsInt();
+			else
+				MProcessPara.validateUnknownParameter(getProcessInfo().getAD_Process_ID(), para);
+		}
 
 	}
 
 	@Override
 	protected String doIt() throws Exception {
-		int i_AD_Client_ID = getAD_Client_ID();
-			MClient client = new MClient(getCtx(), i_AD_Client_ID, get_TrxName());			
-		int i_C_AcctSchema_ID =     client.getAcctSchema().getC_AcctSchema_ID();
+//		int i_AD_Client_ID = getAD_Client_ID();
+//			MClient client = new MClient(getCtx(), i_AD_Client_ID, get_TrxName());			
+//		int i_C_AcctSchema_ID =     client.getAcctSchema().getC_AcctSchema_ID();
 		
 		// update category acctg
 		String sql = "update M_Product_Category_Acct pca "
@@ -33,7 +48,7 @@ public class CopyDefaultProductAccouning extends SvrProcess {
 				+ "or p_purchase_allowances_acct is null "
 				+ ")";
 		
-		int counter = DB.executeUpdate(sql, new Object[] {i_AD_Client_ID,i_C_AcctSchema_ID}, true, get_TrxName());
+		int counter = DB.executeUpdate(sql, new Object[] {p_AD_Client_ID,p_C_AcctSchema_ID}, true, get_TrxName());
 		
 		// update product acct 
 		sql = "update M_Product_acct pca "
@@ -54,7 +69,7 @@ public class CopyDefaultProductAccouning extends SvrProcess {
 				+ "or p_purchase_allowances_acct is null "
 				+ ")";
 		
-		counter += DB.executeUpdate(sql, new Object[] {i_AD_Client_ID,i_C_AcctSchema_ID}, true, get_TrxName());
+		counter += DB.executeUpdate(sql, new Object[] {p_AD_Client_ID,p_C_AcctSchema_ID}, true, get_TrxName());
 		return "update " + counter + " recordes";
 	}
 
