@@ -4,6 +4,7 @@
 # Ignore build directories
 /target/
 /bin/
+/download/
 
 # Ignore IDE files and directories
 /.idea/
