@@ -1821,7 +1821,11 @@ public class Doc_AllocationHdr extends Doc
 			}
 			else
 			{
-				FactLine fl = fact.createLine (null, htPayAcct.get(payment.getC_Payment_ID()), as.getC_Currency_ID(), acctDifference);
+				// 21300_Payment selection 強制在貸方
+				// 2023-10-05
+				//FactLine fl = fact.createLine (null, htPayAcct.get(payment.getC_Payment_ID()), as.getC_Currency_ID(), acctDifference);
+				FactLine fl = fact.createLine (null, htPayAcct.get(payment.getC_Payment_ID()), as.getC_Currency_ID(), null,acctDifference.negate());
+				fl.setUserElement1_ID(0);
 				fl.setDescription(description.toString());
 				fl.setLine_ID(C_AllocationLine_ID == null ? 0 : C_AllocationLine_ID);
 				if (!fact.isAcctBalanced())
