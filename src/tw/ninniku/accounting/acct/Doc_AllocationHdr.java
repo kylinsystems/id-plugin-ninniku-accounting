@@ -347,7 +347,7 @@ public class Doc_AllocationHdr extends Doc
 				if (as.isAccrual())
 				{
 					bpAcct = getAccount(Doc.ACCTTYPE_C_Receivable, as);
-					if(invoice.isComplete())
+					if(invoice.isCreditMemo())
 					{
 						fl = fact.createLine (line, bpAcct,
 								getC_Currency_ID(), allocationSource);
@@ -1544,8 +1544,10 @@ public class Doc_AllocationHdr extends Doc
 				{
 					// 2023-09-19 Invoice Rounding 應付帳款強制在借方 
 					//FactLine fl = fact.createLine (null, acct, as.getC_Currency_ID(), acctDifference.negate());
-					FactLine fl = fact.createLine (null, acct, as.getC_Currency_ID(),acctDifference.negate(), null);
-					fl.setUserElement1_ID(m_invoice.getC_Invoice_ID());
+					// 2023-10-31 改用兌換損益 
+					FactLine fl = fact.createLine (null, as.getCurrencyBalancing_Acct(), as.getC_Currency_ID(), acctDifference.negate());
+					//FactLine fl = fact.createLine (null, acct, as.getC_Currency_ID(),acctDifference.negate(), null);
+					fl.setUserElement1_ID(0);
 					fl.setDescription(description.toString());
 					fl.setLine_ID(C_AllocationLine_ID == null ? 0 : C_AllocationLine_ID);
 					if(isMerge)
