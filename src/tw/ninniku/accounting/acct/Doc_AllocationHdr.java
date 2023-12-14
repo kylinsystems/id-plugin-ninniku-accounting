@@ -294,12 +294,15 @@ public class Doc_AllocationHdr extends Doc
 
 
 				} else {
-
+					//2023-12-14 沖帳匯率日期以 Payment 為主。
+					line.setDateAcct(payment.getDateAcct());
+					line.setC_ConversionType_ID(payment.getC_ConversionType_ID());
 					// Normal behavior -- unchanged if using clearing accounts
-
+						
 					//	Payment/Cash	DR
 					if (line.getC_Payment_ID() != 0)
 					{
+						// assign line 
 						fl = fact.createLine (line, getPaymentAcct(as, line.getC_Payment_ID()),
 							getC_Currency_ID(), line.getAmtSource(), null);
 						if (fl != null && payment != null) {
@@ -310,6 +313,8 @@ public class Doc_AllocationHdr extends Doc
 								allocPayAccounted = allocPayAccounted.add(fl.getAcctBalance());
 						}
 						fl.setUserElement1_ID(0);
+						//2023-12-14 回復日期
+						fl.setDateAcct(getDateAcct());
 					}
 					else if (line.getC_CashLine_ID() != 0)
 					{
@@ -346,6 +351,10 @@ public class Doc_AllocationHdr extends Doc
 				//	AR Invoice Amount	CR
 				if (as.isAccrual())
 				{
+					//2023-12-14 沖帳匯率日期以 invoice 為主。
+					line.setDateAcct(invoice.getDateAcct());
+					line.setC_ConversionType_ID(invoice.getC_ConversionType_ID());
+					
 					bpAcct = getAccount(Doc.ACCTTYPE_C_Receivable, as);
 					if(invoice.isCreditMemo())
 					{
@@ -361,6 +370,8 @@ public class Doc_AllocationHdr extends Doc
 					if (fl != null && invoice != null)
 						fl.setAD_Org_ID(invoice.getAD_Org_ID());
 					fl.setUserElement1_ID(invoice.getC_Invoice_ID());
+					//2023-12-14 回復日期
+					fl.setDateAcct(getDateAcct());
 					// for Realized Gain & Loss
 					flForRGL = factForRGL.createLine (line, bpAcct,
 						getC_Currency_ID(), null, allocationSourceForRGL);		//	payment currency
@@ -407,6 +418,10 @@ public class Doc_AllocationHdr extends Doc
 				//	AP Invoice Amount	DR
 				if (as.isAccrual())
 				{
+					//2023-12-14 沖帳匯率日期以 invoice 為主。
+					line.setDateAcct(invoice.getDateAcct());
+					line.setC_ConversionType_ID(invoice.getC_ConversionType_ID());
+					
 					//折讓不要用負數表示
 					bpAcct = getAccount(Doc.ACCTTYPE_V_Liability, as);
 					if(invoice.isCreditMemo())
@@ -422,7 +437,8 @@ public class Doc_AllocationHdr extends Doc
 					if (fl != null && invoice != null)
 						fl.setAD_Org_ID(invoice.getAD_Org_ID());
 					fl.setUserElement1_ID(invoice.getC_Invoice_ID());
-
+					//2023-12-14 回復日期
+					fl.setDateAcct(getDateAcct());
 					// for Realized Gain & Loss
 					flForRGL = factForRGL.createLine (line, bpAcct,
 						getC_Currency_ID(), allocationSourceForRGL, null);		//	payment currency
@@ -461,6 +477,10 @@ public class Doc_AllocationHdr extends Doc
 				//	Payment/Cash	CR
 				if (isUsingClearing && line.getC_Payment_ID() != 0) // Avoid usage of clearing accounts
 				{
+					//2023-12-14 沖帳匯率日期以 invoice 為主。
+					line.setDateAcct(payment.getDateAcct());
+					line.setC_ConversionType_ID(payment.getC_ConversionType_ID());
+					
 					fl = fact.createLine (line, getPaymentAcct(as, line.getC_Payment_ID()),
 						getC_Currency_ID(), null, line.getAmtSource().negate());
 					if (fl != null && payment != null)
@@ -468,7 +488,8 @@ public class Doc_AllocationHdr extends Doc
 					if (fl != null)
 						allocPayAccounted = allocPayAccounted.add(fl.getAcctBalance().negate());
 					fl.setUserElement1_ID(0);
-
+					//2023-12-14 回復日期
+					fl.setDateAcct(getDateAcct());
 				}
 				else if (isUsingClearing && line.getC_CashLine_ID() != 0) // Avoid usage of clearing accounts
 				{
