@@ -295,8 +295,11 @@ public class Doc_AllocationHdr extends Doc
 
 				} else {
 					//2023-12-14 沖帳匯率日期以 Payment 為主。
-					line.setDateAcct(payment.getDateAcct());
-					line.setC_ConversionType_ID(payment.getC_ConversionType_ID());
+					if(payment != null )
+					{
+						line.setDateAcct(payment.getDateAcct());
+						line.setC_ConversionType_ID(payment.getC_ConversionType_ID());	
+					}
 					// Normal behavior -- unchanged if using clearing accounts
 						
 					//	Payment/Cash	DR
@@ -477,9 +480,13 @@ public class Doc_AllocationHdr extends Doc
 				//	Payment/Cash	CR
 				if (isUsingClearing && line.getC_Payment_ID() != 0) // Avoid usage of clearing accounts
 				{
-					//2023-12-14 沖帳匯率日期以 invoice 為主。
-					line.setDateAcct(payment.getDateAcct());
-					line.setC_ConversionType_ID(payment.getC_ConversionType_ID());
+					//2023-12-14 沖帳匯率日期以 payment 為主。
+					if(payment != null)
+					{
+						line.setDateAcct(payment.getDateAcct());
+						line.setC_ConversionType_ID(payment.getC_ConversionType_ID());
+					}
+					
 					
 					fl = fact.createLine (line, getPaymentAcct(as, line.getC_Payment_ID()),
 						getC_Currency_ID(), null, line.getAmtSource().negate());
