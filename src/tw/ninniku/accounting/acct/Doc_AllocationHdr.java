@@ -318,6 +318,7 @@ public class Doc_AllocationHdr extends Doc
 						fl.setUserElement1_ID(0);
 						//2023-12-14 回復日期
 						fl.setDateAcct(getDateAcct());
+						line.setDateAcct(getDateAcct());
 					}
 					else if (line.getC_CashLine_ID() != 0)
 					{
@@ -362,7 +363,7 @@ public class Doc_AllocationHdr extends Doc
 					if(invoice.isCreditMemo())
 					{
 						fl = fact.createLine (line, bpAcct,
-								getC_Currency_ID(), allocationSource);
+								getC_Currency_ID(), allocationSource.negate());
 					}else {
 						fl = fact.createLine (line, bpAcct,
 						getC_Currency_ID(), null, allocationSource);	
@@ -375,6 +376,8 @@ public class Doc_AllocationHdr extends Doc
 					fl.setUserElement1_ID(invoice.getC_Invoice_ID());
 					//2023-12-14 回復日期
 					fl.setDateAcct(getDateAcct());
+					line.setDateAcct(getDateAcct());
+
 					// for Realized Gain & Loss
 					flForRGL = factForRGL.createLine (line, bpAcct,
 						getC_Currency_ID(), null, allocationSourceForRGL);		//	payment currency
@@ -429,7 +432,7 @@ public class Doc_AllocationHdr extends Doc
 					bpAcct = getAccount(Doc.ACCTTYPE_V_Liability, as);
 					if(invoice.isCreditMemo())
 					{
-						fl = fact.createLine (line, bpAcct,getC_Currency_ID(), allocationSource);
+						fl = fact.createLine (line, bpAcct,getC_Currency_ID(), allocationSource.negate());
 					}else {
 						fl = fact.createLine (line, bpAcct,getC_Currency_ID(), allocationSource, null);								
 					}
@@ -442,6 +445,8 @@ public class Doc_AllocationHdr extends Doc
 					fl.setUserElement1_ID(invoice.getC_Invoice_ID());
 					//2023-12-14 回復日期
 					fl.setDateAcct(getDateAcct());
+					line.setDateAcct(getDateAcct());
+
 					// for Realized Gain & Loss
 					flForRGL = factForRGL.createLine (line, bpAcct,
 						getC_Currency_ID(), allocationSourceForRGL, null);		//	payment currency
@@ -497,6 +502,8 @@ public class Doc_AllocationHdr extends Doc
 					fl.setUserElement1_ID(0);
 					//2023-12-14 回復日期
 					fl.setDateAcct(getDateAcct());
+					line.setDateAcct(getDateAcct());
+
 				}
 				else if (isUsingClearing && line.getC_CashLine_ID() != 0) // Avoid usage of clearing accounts
 				{
