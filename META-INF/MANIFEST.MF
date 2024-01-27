@@ -1,12 +1,12 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Accounting
-Bundle-SymbolicName: tw.ninniku.accounting
-Bundle-Version: 10.0.0.qualifier
+Bundle-Name: iDempiere Plugin : Ninniku Accounting
+Bundle-SymbolicName: idempiere.plugins.ninniku.accounting;singleton:=true
+Bundle-Version: 12.0.0.qualifier
 Bundle-ClassPath: .
 Bundle-Vendor: Ray Lee
-Automatic-Module-Name: tw.ninniku.accounting
-Bundle-RequiredExecutionEnvironment: JavaSE-11
+Automatic-Module-Name: idempiere.plugins.ninniku.accounting
+Bundle-RequiredExecutionEnvironment: JavaSE-17
 Require-Bundle: org.adempiere.base
 Service-Component: OSGI-INF/tw.ninniku.accounting.process.xml,
  OSGI-INF/tw.ninniku.accounting.acct.xml
